@@ -29,7 +29,7 @@ namespace HudOffsetFixer
             LogWindow.SetBox(logTextBox);
         }
 
-        private void HierarchySelectedChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        private void TreeView_OnSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             MainWindowViewModel.Instance.OffsetsHierarchyOnSelectedItemChanged((BaseOffset)e.NewValue);
         }

@@ -13,23 +13,32 @@
             <converters:OffsetsToStringConverter x:Key="OffsetsToStringConverter" />
             <converters:NullVisibilityConverter x:Key="NullVisibilityConverter" />
             <converters:OffsetToColorConverter x:Key="OffsetToColorConverter" />
+            <Style TargetType="DockPanel" x:Key="GlobalDockPanelStyle">
+                <Style.Resources>
+                    <Style TargetType="Label">
+                        <Setter Property="Margin" Value="0,-5,0,-5" />
+                    </Style>
+                </Style.Resources>
+            </Style>
 
             <HierarchicalDataTemplate x:Key="EmployeeTemplate"
                                       ItemsSource="{Binding Path=Child}">
-                <StackPanel Orientation="Horizontal"
+
+                <DockPanel Style="{StaticResource GlobalDockPanelStyle}"
                             Background="{Binding FoundOffsets, Converter={StaticResource OffsetToColorConverter}}">
                     <Label Content="{Binding Name}" />
+
+                    <Label Content="&#x09;Address: "
+                           Visibility="{Binding BaseAddress, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}" />
+                    <Label Content="{Binding BaseAddress, Converter={StaticResource HexConverter}}"
+                           Visibility="{Binding BaseAddress, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}" />
 
                     <Label Content="Offset: "
                            Visibility="{Binding FoundOffsets, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}" />
                     <Label Content="{Binding FoundOffsets, Converter={StaticResource OffsetsToStringConverter}}"
                            Visibility="{Binding FoundOffsets, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}" />
-
-                    <Label Content="Address: "
-                           Visibility="{Binding BaseAddress, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}" />
-                    <Label Content="{Binding BaseAddress, Converter={StaticResource HexConverter}}"
-                           Visibility="{Binding BaseAddress, Converter={StaticResource NullVisibilityConverter}, FallbackValue=Collapsed}" />
-                </StackPanel>
+   
+                </DockPanel>
             </HierarchicalDataTemplate>
             <Style TargetType="TreeViewItem">
                 <Setter Property="IsExpanded" Value="True" />
@@ -45,13 +54,14 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="200" />
+            <ColumnDefinition Width="Auto" MaxWidth="300"/>
         </Grid.ColumnDefinitions>
 
 
         <TreeView Grid.Row="0" Grid.Column="0"
                   ItemsSource="{Binding Path=Nodes}"
-                  ItemTemplate="{StaticResource EmployeeTemplate}" />
+                  ItemTemplate="{StaticResource EmployeeTemplate}" 
+                  SelectedItemChanged="TreeView_OnSelectedItemChanged"/>
 
         <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical">
             <Button Content="Connect" Command="{Binding Connect}" Width="100" Height="30" />
@@ -65,20 +75,17 @@
 
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Found Offsets: " />
-                        <Label
-                            Content="{Binding SelectedOffset.FoundOffsets, Converter={StaticResource OffsetsToStringConverter}}" />
+                        <TextBox Text="{Binding SelectedOffset.FoundOffsets, Converter={StaticResource OffsetsToStringConverter}}" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
                         <Label Content="Address (StructsOnly):" />
-                        <Label
-                            Content="{Binding SelectedOffset.BaseAddress, Converter={StaticResource HexConverter}}" />
+                        <TextBox Text="{Binding SelectedOffset.BaseAddress, Converter={StaticResource HexConverter}}" />
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal">
                         <Label Content="DebugInfo (StructsOnly):" />
-                        <Label
-                            Content="{Binding SelectedOffset.DebugInfo, Converter={StaticResource HexConverter}}" />
+                        <TextBox Text="{Binding SelectedOffset.DebugInfo, Converter={StaticResource HexConverter}}" />
                     </StackPanel>
 
                 </StackPanel>

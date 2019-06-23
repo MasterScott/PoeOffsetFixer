@@ -3,7 +3,7 @@ using PoeHUD.Framework;
 
 namespace HudOffsetFixer.Core.SearchStrategies
 {
-    public class ReadFirstPtrStrategy : IOffsetSearch
+    public class FirstPointerStrategy : IOffsetSearch
     {
         public List<int> SearchOffsets(OffsetSearchParams searchParams, Memory memory)
         {

@@ -5,13 +5,13 @@ using PoeHUD.Framework;
 
 namespace HudOffsetFixer.Core.SearchStrategies.PointerStrategy
 {
-    public class SubStructSearchStrategy : IOffsetSearch
+    public class SubPointersSearchStrategy : IOffsetSearch
     {
         private readonly bool _checkVMT;
         private readonly ISubStructOffsetSearch _subStructSearch;
         private readonly int _subStructSize;
 
-        public SubStructSearchStrategy(ISubStructOffsetSearch subStructSearch, int subStructSize, bool checkVmt)
+        public SubPointersSearchStrategy(ISubStructOffsetSearch subStructSearch, int subStructSize, bool checkVmt)
         {
             _subStructSearch = subStructSearch;
             _subStructSize = subStructSize;

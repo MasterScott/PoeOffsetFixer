@@ -23,7 +23,7 @@ namespace HudOffsetFixer.Core
 
                 if (structureOffsetChild is StructureOffset structureOffset)
                 {
-                    if (structureOffsetChild.OffsetsFound)
+                    if (structureOffsetChild.FoundOffsets.Count == 1)
                     {
                         structureOffset.BaseAddress = _memory.ReadLong(initialStructure.BaseAddress + structureOffsetChild.UsedOffset);
                         FixStructureChilds(structureOffset);

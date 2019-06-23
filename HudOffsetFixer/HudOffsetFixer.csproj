@@ -85,9 +85,10 @@
     <Compile Include="Converters\NullVisibilityConverter.cs" />
     <Compile Include="Converters\OffsetsToStringConverter.cs" />
     <Compile Include="Converters\OffsetToColorConverter.cs" />
-    <Compile Include="Core\SearchStrategies\ReadFirstPtrStrategy.cs" />
+    <Compile Include="Core\SearchStrategies\FirstPointerStrategy.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\ByteValueReader.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\FloatValueReader.cs" />
+    <Compile Include="Core\SearchStrategies\ValueReaders\MultipleIntValueReader.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\UShortValueReader.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\ValueReaderData.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\ValueReaderStrategy.cs" />
@@ -96,7 +97,8 @@
     <Compile Include="Core\SearchStrategies\PointerStrategy\MultiValue\DefaultMultiValueOffsetsFilter.cs" />
     <Compile Include="Core\SearchStrategies\PointerStrategy\MultiValue\MultiValueStrategy.cs" />
     <Compile Include="Core\SearchStrategies\PointerStrategy\SingleOffsetSearchAdapter.cs" />
-    <Compile Include="Core\SearchStrategies\PointerStrategy\SubStructSearchStrategy.cs" />
+    <Compile Include="Core\SearchStrategies\PointerStrategy\SubPointersSearchStrategy.cs" />
+    <Compile Include="Core\StrategyUtils.cs" />
     <Compile Include="Core\Utils\Helpers.cs" />
     <Compile Include="Core\ValueCompare\ArrayLengthDoublePointerCompare.cs" />
     <Compile Include="Core\ValueCompare\DefaultValueCompare.cs" />
