@@ -12,6 +12,7 @@ namespace HudOffsetFixer.Core
         public string DebugInfo { get; set; }
 
         public Action OnOffsetsFound = delegate {};
+        public Func<bool> ShouldProcess = () => true;
 
         public long BaseAddress
         {

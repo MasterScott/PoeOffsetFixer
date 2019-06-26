@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using HudOffsetFixer.Core.SearchStrategies.PointerStrategy;
 using PoeHUD.Framework;
 
-namespace HudOffsetFixer.Core.SearchStrategies.PointerStrategy.MultiValue
+namespace HudOffsetFixer.Core.SearchStrategies.MultiValue
 {
     public class MultiValueStrategy : ISubStructOffsetSearch
     {

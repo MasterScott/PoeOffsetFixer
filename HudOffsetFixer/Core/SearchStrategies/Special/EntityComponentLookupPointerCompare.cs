@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HudOffsetFixer.Core.SearchStrategies.PointerStrategy;
+using HudOffsetFixer.Core.ValueCompare;
 using HudOffsetFixer.PoeStructs;
 
-namespace HudOffsetFixer.Core.ValueCompare.Special
+namespace HudOffsetFixer.Core.SearchStrategies.Special
 {
     public class EntityComponentLookupPointerCompare : IValueCompare<PossiblePointerInfo>
     {

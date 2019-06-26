@@ -6,7 +6,7 @@
         xmlns:converters="clr-namespace:HudOffsetFixer.Converters"
         mc:Ignorable="d"
         DataContext="{StaticResource MainViewModel}"
-        Title="MainWindow" Height="1000" Width="1000">
+        Title="MainWindow" Height="800" Width="1000">
     <Window.Resources>
         <ResourceDictionary>
             <converters:HexConverter x:Key="HexConverter" />
@@ -25,7 +25,7 @@
                                       ItemsSource="{Binding Path=Child}">
 
                 <DockPanel Style="{StaticResource GlobalDockPanelStyle}"
-                            Background="{Binding FoundOffsets, Converter={StaticResource OffsetToColorConverter}}">
+                            Background="{Binding SearchStatus, Converter={StaticResource OffsetToColorConverter}}">
                     <Label Content="{Binding Name}" />
 
                     <Label Content="&#x09;Address: "

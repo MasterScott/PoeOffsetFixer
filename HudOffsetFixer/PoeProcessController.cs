@@ -11,7 +11,6 @@ namespace HudOffsetFixer
     public class PoeProcessController
     {
         private Offsets _offs;
-        private GameController _gameController;
         private Memory _memory;
         private MemorySectionsProcessor _memorySectionsProcessor;
 
@@ -30,7 +29,6 @@ namespace HudOffsetFixer
             {
                 _memory = new Memory(_offs, pid);
                 _offs.DoPatternScans(_memory);
-                _gameController = new GameController(_memory);
                 _memorySectionsProcessor = new MemorySectionsProcessor();
                 _memorySectionsProcessor.UpdateProcessInformations(_memory.procHandle);
             }

@@ -19,7 +19,7 @@ namespace HudOffsetFixer.MemorySections
             [MarshalAs(UnmanagedType.FunctionPtr)] EnumerateRemoteSectionCallback callbackSection,
             [MarshalAs(UnmanagedType.FunctionPtr)] EnumerateRemoteModuleCallback callbackModule);
 
-        private readonly List<Section> _sections = new List<Section>();
+        public List<Section> Sections { get; } = new List<Section>();
         private readonly EnumerateRemoteSectionsAndModulesDelegate _enumerateRemoteSectionsAndModulesDelegate;
 
         public MemorySectionsProcessor()
@@ -49,15 +49,15 @@ namespace HudOffsetFixer.MemorySections
 
         public Section GetSectionToPointer(IntPtr address)
         {
-            return _sections.BinaryFind(s => address.CompareToRange(s.Begin, s.End));
+            return Sections.BinaryFind(s => address.CompareToRange(s.Begin, s.End));
         }
 
         public void UpdateProcessInformations(IntPtr process)
         {
             EnumerateRemoteSectionsAndModules(process, out var newSections);
             newSections.Sort((s1, s2) => s1.Begin.CompareTo(s2.Begin));
-            _sections.Clear();
-            _sections.AddRange(newSections);
+            Sections.Clear();
+            Sections.AddRange(newSections);
         }
 
         public void EnumerateRemoteSectionsAndModules(IntPtr process, out List<Section> sections)

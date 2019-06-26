@@ -11,7 +11,7 @@ namespace HudOffsetFixer.Converters
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var offsets = (List<int>) value;
-            return string.Join("/", offsets.Select(x => $"0x{x:X}"));
+            return string.Join("/ ", offsets.Select(x => $"0x{x:X}"));
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

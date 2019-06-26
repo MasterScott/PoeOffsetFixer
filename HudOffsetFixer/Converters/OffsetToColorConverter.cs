@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
+using HudOffsetFixer.Core;
 
 namespace HudOffsetFixer.Converters
 {
@@ -10,14 +10,21 @@ namespace HudOffsetFixer.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var offsets = (List<int>)value;
+            var searchStatus = (OffsetSearchStatus) value;
 
-            if(offsets.Count == 0 )
-                return  new SolidColorBrush(Colors.IndianRed);
-            if(offsets.Count > 1)
-                return new SolidColorBrush(Colors.Yellow);
-
-            return new SolidColorBrush(Colors.LightGreen);
+            switch (searchStatus)
+            {
+                case OffsetSearchStatus.Unknown:
+                    return new SolidColorBrush(Colors.White);
+                case OffsetSearchStatus.NotFound:
+                    return new SolidColorBrush(Colors.PaleVioletRed);
+                case OffsetSearchStatus.FoundSingle:
+                    return new SolidColorBrush(Colors.LightGreen);
+                case OffsetSearchStatus.FoundMultiple:
+                    return new SolidColorBrush(Colors.Yellow);
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }      
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

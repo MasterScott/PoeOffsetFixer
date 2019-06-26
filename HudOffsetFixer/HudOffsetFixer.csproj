@@ -61,6 +61,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -86,6 +87,7 @@
     <Compile Include="Converters\OffsetsToStringConverter.cs" />
     <Compile Include="Converters\OffsetToColorConverter.cs" />
     <Compile Include="Core\SearchStrategies\FirstPointerStrategy.cs" />
+    <Compile Include="Core\SearchStrategies\Special\ReturnExistingOffsetStrategy.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\ByteValueReader.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\FloatValueReader.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\MultipleIntValueReader.cs" />
@@ -93,21 +95,24 @@
     <Compile Include="Core\SearchStrategies\ValueReaders\ValueReaderData.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\ValueReaderStrategy.cs" />
     <Compile Include="Core\SearchStrategies\PointerStrategy\ISubStructOffsetSearch.cs" />
-    <Compile Include="Core\SearchStrategies\PointerStrategy\MultiValue\IMultiValueOffsetsFilter.cs" />
-    <Compile Include="Core\SearchStrategies\PointerStrategy\MultiValue\DefaultMultiValueOffsetsFilter.cs" />
-    <Compile Include="Core\SearchStrategies\PointerStrategy\MultiValue\MultiValueStrategy.cs" />
+    <Compile Include="Core\SearchStrategies\MultiValue\IMultiValueOffsetsFilter.cs" />
+    <Compile Include="Core\SearchStrategies\MultiValue\DefaultMultiValueOffsetsFilter.cs" />
+    <Compile Include="Core\SearchStrategies\MultiValue\MultiValueStrategy.cs" />
     <Compile Include="Core\SearchStrategies\PointerStrategy\SingleOffsetSearchAdapter.cs" />
     <Compile Include="Core\SearchStrategies\PointerStrategy\SubPointersSearchStrategy.cs" />
     <Compile Include="Core\StrategyUtils.cs" />
     <Compile Include="Core\Utils\Helpers.cs" />
+    <Compile Include="Core\Utils\KeyboardHelpers.cs" />
     <Compile Include="Core\ValueCompare\ArrayLengthDoublePointerCompare.cs" />
     <Compile Include="Core\ValueCompare\DefaultValueCompare.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\MultipleFloatValueReader.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\IntValueReader.cs" />
+    <Compile Include="Core\ValueCompare\DelegateReferenceValueCompare.cs" />
     <Compile Include="Core\ValueCompare\FloatValueCompare.cs" />
+    <Compile Include="Core\ValueCompare\PointerValueCompare.cs" />
     <Compile Include="Core\ValueCompare\SelfReferencingStructPointerValueCompare.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\StringValueReader.cs" />
-    <Compile Include="Core\ValueCompare\Special\EntityComponentLookupPointerCompare.cs" />
+    <Compile Include="Core\SearchStrategies\Special\EntityComponentLookupPointerCompare.cs" />
     <Compile Include="Extensions\StringCompareTypeExtensions.cs" />
     <Compile Include="Core\ValueCompare\StringValueComparer.cs" />
     <Compile Include="Extensions\Extensions.cs" />

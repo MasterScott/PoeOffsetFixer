@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace HudOffsetFixer.Core.SearchStrategies.PointerStrategy.MultiValue
+namespace HudOffsetFixer.Core.SearchStrategies.MultiValue
 {
     public interface IMultiValueOffsetsFilter
     {

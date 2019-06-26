@@ -9,11 +9,12 @@ namespace HudOffsetFixer.Core
         public readonly IOffsetSearch OffsetSearch;
         private int _usedOffset = -1;
         private List<int> _foundOffsets = new List<int>();
+        private OffsetSearchStatus _searchStatus;
 
         public List<int> FoundOffsets
         {
             get => _foundOffsets;
-            set =>  SetProperty(ref _foundOffsets, value);
+            set => SetProperty(ref _foundOffsets, value);
         }
 
         public int UsedOffset
@@ -22,11 +23,26 @@ namespace HudOffsetFixer.Core
             set => SetProperty(ref _usedOffset, value);
         }
 
-        public bool OffsetsFound => FoundOffsets.Count > 0;
+        public OffsetSearchStatus SearchStatus
+        {
+            get => _searchStatus;
+            set => SetProperty(ref _searchStatus, value);
+        }
+
+        public bool OffsetIsFound => FoundOffsets.Count == 1;
+
         public BaseOffset(string name, IOffsetSearch offsetSearch)
         {
             Name = name;
             OffsetSearch = offsetSearch;
         }
+    }
+
+    public enum OffsetSearchStatus
+    {
+        Unknown,
+        NotFound,
+        FoundSingle,
+        FoundMultiple
     }
 }

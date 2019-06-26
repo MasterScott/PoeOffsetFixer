@@ -14,13 +14,13 @@ namespace HudOffsetFixer.Core
 
         public static IOffsetSearch SubStructSearch(this IOffsetSearch offsetSearch, int subStructSize, bool checkVmt)
         {
-            return new SubPointersSearchStrategy(offsetSearch.Adapter(), subStructSize, checkVmt);
+            return new SubPointersSearchStrategy(offsetSearch.Adapter(), subStructSize: subStructSize, checkVmt: checkVmt);
         }
 
         public static void AddStringSearch(this StructureOffset structOffset, string offsetName, string value, bool firstFound = false)
         {
             structOffset.Child.Add(new DataOffset(offsetName,
-                new PointersSearchStrategy(new StringValueReader(new DefaultValueCompare<string>(value)), firstFound)));
+                new PointersSearchStrategy(new StringValueReader(new DefaultValueCompare<string>(value)), checkVmt: false, firstFound: firstFound)));
         }
 
         public static void AddIntSearch(this StructureOffset structOffset, string offsetName, int value, bool firstFound = false)
@@ -45,6 +45,22 @@ namespace HudOffsetFixer.Core
         {
             structOffset.Child.Add(new DataOffset(offsetName,
                 new ValueReaderStrategy(new UShortValueReader(new DefaultValueCompare<ushort>(value)), sizeof(ushort), firstFound: firstFound)));
+        }
+
+
+        public static IOffsetSearch StringInSubStruct(string value, int subStructSize, bool checkVmt, bool firstFound = false)
+        {
+            return StringSearch(value, firstFound).SubStructSearch(subStructSize: subStructSize, checkVmt: checkVmt);
+        }
+
+        public static IOffsetSearch StringSearch(string value, bool firstFound = false)
+        {
+            return new PointersSearchStrategy(new StringValueReader(new DefaultValueCompare<string>(value)), checkVmt: false, firstFound: firstFound);
+        }
+
+        public static IOffsetSearch StringSearch(IValueCompare<string> comparer, bool firstFound = false)
+        {
+            return new PointersSearchStrategy(new StringValueReader(comparer), checkVmt: false, firstFound: firstFound);
         }
     }
 }
