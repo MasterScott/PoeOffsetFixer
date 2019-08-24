@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿//#define SEARCH_INGAMESTATE
+
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -62,7 +64,7 @@ namespace HudOffsetFixer
                 OffsetsFixer.FixStructureChilds(structureOffset);
             }
         }
-  
+
         public void ConnectToPoe()
         {
             PoeProcess = new PoeProcessController();
@@ -76,7 +78,7 @@ namespace HudOffsetFixer
         {
             _initialStates.Clear();
 
-#if SEARCH_INGAMESTATE//TODO: Push to ckeckbox
+#if SEARCH_INGAMESTATE //TODO: Push to ckeckbox
               if (!SearchInGameState(out var debugRectValueAddress))
             {
                 MessageBox.Show("Can't find debug rectangle state in poe (searching InGameState automatically)");
@@ -88,7 +90,7 @@ namespace HudOffsetFixer
             var inGameStateAddr = debugRectValueAddress - 0x568; 
 
 #else
-            var inGameStateAddr = 0xCA897364C0;
+            var inGameStateAddr = 0x713C82DF80;
 #endif
 
             var inGameState = new StructureOffset("InGameState", null, maxStructSize: 0x1000, baseAddress: inGameStateAddr);
@@ -159,7 +161,6 @@ namespace HudOffsetFixer
             }
         }
 
-    
         private bool SearchInGameState(out long debugRectAddr)
         {
             var debugRectAddresses = new LinkedList<long>();
@@ -193,12 +194,13 @@ namespace HudOffsetFixer
 
                 FocusWindow();
                 KeyboardHelpers.KeyPress(Keys.F1);
-                
+
                 var currentNode = debugRectAddresses.Last;
 
                 while (currentNode != null)
                 {
                     var previous = currentNode.Previous;
+
                     if (Memory.Instance.ReadByte(currentNode.Value) != debugValue)
                     {
                         debugRectAddresses.Remove(currentNode);
@@ -315,7 +317,7 @@ namespace HudOffsetFixer
             var worldPosReader = new ValueReaderStrategy(worldPos, alignment: 4);
 
             var entityPositionedComponent = new StructureOffset("Entity.PositionedComponent",
-                new SubPointersSearchStrategy(worldPosReader.Adapter(), subStructSize: 0x100, checkVmt: true),
+                new SubPointersSearchStrategy(worldPosReader.Adapter(), subStructSize: 0x200, checkVmt: true),
                 maxStructSize: 0x300);
 
             player.Child.Add(entityPositionedComponent);
@@ -375,38 +377,46 @@ namespace HudOffsetFixer
 
             #region Life
 
-            var lifeComponent = new StructureOffset("LifeComponent", null, maxStructSize: 0x200);
+            var lifeComponent = new StructureOffset("LifeComponent", null, maxStructSize: 0x300);
             _initialStates.Add(lifeComponent);
 
             player.OnOffsetsFound += delegate { lifeComponent.BaseAddress = Entity.GetComponentAddress(player.BaseAddress, "Life"); };
 
-            var searchMaxHp = new ValueReaderStrategy(new MultipleIntValueReader(
-                new DefaultValueCompare<int>(97),
-                new DefaultValueCompare<int>(97)), 4);
+            //var searchMaxHp = new ValueReaderStrategy(new MultipleIntValueReader(
+            //    new DefaultValueCompare<int>(97),
+            //    new DefaultValueCompare<int>(97)), 4);
+            //lifeComponent.Child.Add(new DataOffset("MaxHp", searchMaxHp));     //this will work only when they goes strictly one after another
+            //lifeComponent.Child.Add(new DataOffset("CurHp", new ReturnExistingOffsetStrategy(searchMaxHp, 0x4)));
 
-            lifeComponent.Child.Add(new DataOffset("MaxHp", searchMaxHp));
-            lifeComponent.Child.Add(new DataOffset("CurHp", new ReturnExistingOffsetStrategy(searchMaxHp, 0x4)));
+            lifeComponent.Child.Add(new DataOffset("MaxHp",
+                new MultipleOffsetsSelectorOffsetSearch(new ValueReaderStrategy(new IntValueReader(new DefaultValueCompare<int>(97)), 4), 2, 0)));
 
-            var searchMaxMana = new ValueReaderStrategy(new MultipleIntValueReader(
-                new DefaultValueCompare<int>(74),
-                new DefaultValueCompare<int>(66)), 4);
+            lifeComponent.Child.Add(new DataOffset("CurHp",
+                new MultipleOffsetsSelectorOffsetSearch(new ValueReaderStrategy(new IntValueReader(new DefaultValueCompare<int>(97)), 4), 2, 1)));
 
-            lifeComponent.Child.Add(new DataOffset("MaxMana", searchMaxMana));
-            lifeComponent.Child.Add(new DataOffset("CurMana", new ReturnExistingOffsetStrategy(searchMaxMana, 0x4)));
+            //var searchMaxMana = new ValueReaderStrategy(new MultipleIntValueReader(
+            //    new DefaultValueCompare<int>(74),
+            //    new DefaultValueCompare<int>(66)), 4);
+            //lifeComponent.Child.Add(new DataOffset("MaxMana", searchMaxMana));
+            //lifeComponent.Child.Add(new DataOffset("CurMana", new ReturnExistingOffsetStrategy(searchMaxMana, 0x4)));
+            lifeComponent.Child.Add(new DataOffset("MaxMana", new ValueReaderStrategy(new IntValueReader(new DefaultValueCompare<int>(74)), 4)));
+            lifeComponent.Child.Add(new DataOffset("CurMana", new ValueReaderStrategy(new IntValueReader(new DefaultValueCompare<int>(66)), 4)));
 
-            var searchReservedMana = new ValueReaderStrategy(new MultipleIntValueReader(
-                new DefaultValueCompare<int>(0),
-                new DefaultValueCompare<int>(10)), 4);
+            //var searchReservedMana = new ValueReaderStrategy(new MultipleIntValueReader(
+            //    new DefaultValueCompare<int>(0),
+            //    new DefaultValueCompare<int>(10)), 4);
+            //lifeComponent.Child.Add(new DataOffset("ReservedFlatMana", searchReservedMana));
+            //lifeComponent.Child.Add(new DataOffset("ReservedPercentMana", new ReturnExistingOffsetStrategy(searchReservedMana, 0x4)));
+            lifeComponent.Child.Add(new DataOffset("ReservedFlatMana", new ValueReaderStrategy(new IntValueReader(new DefaultValueCompare<int>(0)), 4)));
+            lifeComponent.Child.Add(new DataOffset("ReservedPercentMana", new ValueReaderStrategy(new IntValueReader(new DefaultValueCompare<int>(10)), 4)));
 
-            lifeComponent.Child.Add(new DataOffset("ReservedFlatMana", searchReservedMana));
-            lifeComponent.Child.Add(new DataOffset("ReservedPercentMana", new ReturnExistingOffsetStrategy(searchReservedMana, 0x4)));
-
-            var searchEs = new ValueReaderStrategy(new MultipleIntValueReader(
-                new DefaultValueCompare<int>(34),
-                new DefaultValueCompare<int>(34)), 4);
-
-            lifeComponent.Child.Add(new DataOffset("MaxEs", searchEs));
-            lifeComponent.Child.Add(new DataOffset("CurEs", new ReturnExistingOffsetStrategy(searchEs, 0x4)));
+            //var searchEs = new ValueReaderStrategy(new MultipleIntValueReader(
+            //    new DefaultValueCompare<int>(34),
+            //    new DefaultValueCompare<int>(34)), 4);
+            //lifeComponent.Child.Add(new DataOffset("MaxEs", searchEs));
+            //lifeComponent.Child.Add(new DataOffset("CurEs", new ReturnExistingOffsetStrategy(searchEs, 0x4)));
+            lifeComponent.Child.Add(new DataOffset("MaxEs", new ValueReaderStrategy(new IntValueReader(new DefaultValueCompare<int>(34)), 4)));
+            lifeComponent.Child.Add(new DataOffset("CurEs", new ValueReaderStrategy(new IntValueReader(new DefaultValueCompare<int>(34)), 4)));
 
             var buffStruct = StrategyUtils.StringInSubStruct("sand_stance", 0x20, false, false); //todo:set to 0x10
             var buffStruct1 = buffStruct.SubStructSearch(0x20, false);
