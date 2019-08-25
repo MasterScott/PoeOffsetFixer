@@ -20,7 +20,8 @@ namespace HudOffsetFixer.Core.SearchStrategies.Special
             {
                 return new List<int>{_source.FoundOffsets[0] + _applyOffset};
             }
-            else if (_source.FoundOffsets.Count > 1)
+            
+            if (_source.FoundOffsets.Count > 1)
             {
                 return new List<int>();
             }

@@ -89,6 +89,7 @@
     <Compile Include="Core\SearchStrategies\FirstPointerStrategy.cs" />
     <Compile Include="Core\SearchStrategies\PointerStrategy\MultipleOffsetsSelectorOffsetSearch.cs" />
     <Compile Include="Core\SearchStrategies\Special\ReturnExistingOffsetStrategy.cs" />
+    <Compile Include="Core\SearchStrategies\ValueReaders\ArrayByteLengthValueCompare.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\ByteValueReader.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\FloatValueReader.cs" />
     <Compile Include="Core\SearchStrategies\ValueReaders\MultipleIntValueReader.cs" />

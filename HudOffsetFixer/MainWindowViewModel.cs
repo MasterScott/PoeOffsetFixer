@@ -90,7 +90,7 @@ namespace HudOffsetFixer
             var inGameStateAddr = debugRectValueAddress - 0x568; 
 
 #else
-            var inGameStateAddr = 0x713C82DF80;
+            var inGameStateAddr = 0xA8F9242A0;
 #endif
 
             var inGameState = new StructureOffset("InGameState", null, maxStructSize: 0x1000, baseAddress: inGameStateAddr);
@@ -230,11 +230,23 @@ namespace HudOffsetFixer
         {
             var inGameDataAreaNameStructSearch = StrategyUtils.StringInSubStruct("Lush Hideout", subStructSize: 0x10, checkVmt: false);
             var inGameDataStructSearch = inGameDataAreaNameStructSearch.SubStructSearch(subStructSize: 0x600, checkVmt: true);
-            var inGameData = new StructureOffset("InGameData", inGameDataStructSearch, maxStructSize: 0x600);
+            var inGameData = new StructureOffset("InGameData", inGameDataStructSearch, maxStructSize: 0x800);//don't set to 0x1000 coz it can find multiple player offsets
             inGameState.Child.Add(inGameData);
 
             inGameData.Child.Add(new DataOffset("Area Name", inGameDataAreaNameStructSearch));
             inGameData.AddByteSearch("Area Level", 60, false, 8);
+
+
+            inGameData.Child.Add(new DataOffset("Tgt.Cols/Tgt.Rows(+0x8)/PtrAddr(+0x10)", new ValueReaderStrategy(new MultipleIntValueReader(
+                new DefaultValueCompare<int>(33),
+                new DefaultValueCompare<int>(0),
+                new DefaultValueCompare<int>(33),
+                new DefaultValueCompare<int>(0)
+            ), 4)));
+
+            inGameData.Child.Add(new DataOffset("NavPtr", new ValueReaderStrategy(new ArrayByteLengthValueCompare(288420), 8)));//288420 / 8
+            inGameData.Child.Add(new DataOffset("MapWidth", new ValueReaderStrategy(new IntValueReader(new DefaultValueCompare<int>(380)), 4)));
+
             return inGameData;
         }
 
